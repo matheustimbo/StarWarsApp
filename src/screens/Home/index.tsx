@@ -2,19 +2,16 @@ import React from 'react';
 import {View, StyleSheet, TouchableOpacity, Text, FlatList} from 'react-native';
 import usePeople from '../../hooks/usePeople';
 import {People} from '../../providers/starWarsContext';
+import PeopleItem from './components/PeopleItem';
 
 const Home: React.FC = () => {
   const {people, loadingPeople, fetchPeoples} = usePeople();
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => fetchPeoples()}>
-        <Text>fetch</Text>
-      </TouchableOpacity>
-      <Text>Loading people: {loadingPeople}</Text>
-      {people.map((p: People) => (
-        <Text>{p.name}</Text>
-      ))}
-      <FlatList />
+      <FlatList
+        data={people}
+        renderItem={({item}) => <PeopleItem people={item} />}
+      />
     </View>
   );
 };
