@@ -1,19 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {useContext, useEffect, useState} from 'react';
-import {People} from '../providers/starWarsContext';
 import api from '../services/api';
-import {Context as StarWarsContext} from '../providers/starWarsContext';
+import {Context as PeopleContext} from '../providers/peopleContext';
 
 export default () => {
-  const [count, setCount] = useState<Number>(0);
   const [nextLink, setNextLink] = useState<string | null>('people');
 
   const {
     requestLoad,
     loadFailure,
     loadSuccess,
-    state: {people, loadingPeople},
-  } = useContext(StarWarsContext);
+    state: {peoples, loadingPeople},
+  } = useContext(PeopleContext);
 
   const hasNext: Boolean = nextLink !== null;
 
@@ -28,18 +26,19 @@ export default () => {
         const newPeoplesResponse = await api.get(nextLink);
         const newPeoples = newPeoplesResponse.data;
         if (newPeoples.results?.length > 0) {
+          console.log('results', newPeoples.results);
           setNextLink(newPeoples.next);
           loadSuccess(newPeoples.results);
         }
       } catch (e) {
+        console.log('ERROOOOO', e);
         loadFailure();
       }
     }
   };
 
   return {
-    count,
-    people,
+    peoples,
     loadingPeople,
     nextLink,
     hasNext,
