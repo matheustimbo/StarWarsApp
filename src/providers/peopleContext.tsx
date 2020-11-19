@@ -1,7 +1,7 @@
 import createDataContext from './createDataContext';
 
-export interface StarWarsContext {
-  people: string[];
+export interface PeopleContext {
+  peoples: string[];
   loadingPeople: Boolean;
 }
 
@@ -20,14 +20,29 @@ export interface People {
   birth_year: string;
   gender: string;
   homeworld: string;
-  movies: string[];
+  films: string[];
   species: string[];
   vehicles: string[];
   starships: string[];
   url: string;
 }
 
-const starWarsReducer = (state: StarWarsContext, action: ActionType) => {
+export interface Film {
+  title: string;
+  episode_id: number;
+  opening_crawl: string;
+  director: string;
+  producer: string;
+  characters: string[];
+  planets: string[];
+  starships: string[];
+  vehicles: string[];
+  species: string[];
+  url: string;
+  id: number;
+}
+
+const peopleReducer = (state: PeopleContext, action: ActionType) => {
   switch (action.type) {
     case 'request_load':
       return {...state, loadingPeople: true};
@@ -37,7 +52,7 @@ const starWarsReducer = (state: StarWarsContext, action: ActionType) => {
       return {
         ...state,
         loadingPeople: false,
-        people: [...state.people, ...action.payload],
+        peoples: [...state.peoples, ...action.payload],
       };
     default:
       return state;
@@ -54,7 +69,7 @@ export const loadSuccess = (dispatch: Function) => (newPeople: People[]) =>
   dispatch({type: 'load_success', payload: newPeople});
 
 export const {Provider, Context} = createDataContext(
-  starWarsReducer,
+  peopleReducer,
   {
     //methods
     requestLoad,
@@ -63,7 +78,7 @@ export const {Provider, Context} = createDataContext(
   },
   {
     //initial state
-    people: [],
+    peoples: [],
     loadingPeople: false,
   },
 );

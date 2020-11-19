@@ -3,7 +3,8 @@ import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Home from './screens/Home';
-import {Provider as StarWarsProvider} from './providers/starWarsContext';
+import PersonDetails from './screens/PersonDetails';
+import {Provider as PeopleProvider} from './providers/peopleContext';
 
 const Stack = createStackNavigator();
 
@@ -11,6 +12,7 @@ function StackScreens() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="PersonDetails" component={PersonDetails} />
     </Stack.Navigator>
   );
 }
@@ -18,9 +20,9 @@ function StackScreens() {
 export default function App() {
   return (
     <NavigationContainer>
-      <StarWarsProvider>
+      <PeopleProvider>
         <StackScreens />
-      </StarWarsProvider>
+      </PeopleProvider>
     </NavigationContainer>
   );
 }
