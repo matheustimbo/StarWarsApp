@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import ListLoadingIndicator from './components/ListLoadingIndicator';
 import useFavoritePeople from '../../hooks/useFavoritePeople';
 import {StackNavigationProp} from '@react-navigation/stack';
 import colors from '../../utils/colors';
+import {Context as PeopleContext} from '../../providers/peopleContext';
 
 const {width, height} = Dimensions.get('window');
 
@@ -25,7 +26,9 @@ type Props = {
 };
 
 const Home: React.FC<Props> = ({navigation}) => {
-  const {peoples, loadingPeople, fetchPeoples} = usePeople();
+  const peopleContextData = useContext(PeopleContext);
+
+  const {peoples, loadingPeople, fetchPeoples} = usePeople(peopleContextData);
 
   const {
     onPressBookmarkPerson,
@@ -57,7 +60,7 @@ const Home: React.FC<Props> = ({navigation}) => {
           !showOnlyBookmarked && fetchPeoples();
         }}
         onEndReachedThreshold={0.5}
-        keyExtractor={({index}) => index}
+        keyExtractor={({url}) => url}
         renderItem={({item}) => (
           <PeopleItem
             people={item}
