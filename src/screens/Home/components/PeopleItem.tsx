@@ -7,22 +7,18 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {People} from '../../../providers/peopleContext';
-import {RectButton} from 'react-native-gesture-handler';
-import {useNavigation} from '@react-navigation/native';
-import Star from '../../../assets/svgs/star.svg';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import colors from '../../../utils/colors';
 
 const {width} = Dimensions.get('window');
 
 const PeopleItem: React.FC<{
   people: People;
-  index: number;
   onPressBookmark: Function;
   isBookmarked: Function;
-}> = ({people, index, onPressBookmark, isBookmarked}) => {
-  const {navigate} = useNavigation();
-
+  goToDetails: Function;
+}> = ({people, onPressBookmark, isBookmarked, goToDetails}) => {
   const bookmarked = isBookmarked(people);
-  console.log('bookmarked', bookmarked);
 
   return (
     <View style={styles.container}>
@@ -31,24 +27,22 @@ const PeopleItem: React.FC<{
         onPress={() => {
           onPressBookmark(people);
         }}>
-        {bookmarked?.name ? (
-          <Star width={24} height={24} fill="gold" />
-        ) : (
-          <Star width={24} height={24} fill="lightgray" />
-        )}
+        <Icon
+          size={24}
+          name="star"
+          color={bookmarked !== undefined ? colors.gold : colors.disabled}
+        />
       </TouchableOpacity>
 
-      <Text>Name: {people.name}</Text>
-      <Text>Height: {people.height}</Text>
-      <Text>Mass: {people.mass}</Text>
-      <Text>Hair color: {people.hair_color}</Text>
-      <Text>Skin color: {people.skin_color}</Text>
-      <Text>Birth Year: {people.birth_year}</Text>
-      <Text>Gender: {people.gender}</Text>
-      <Text>Homeworld: {people.homeworld}</Text>
-      <RectButton onPress={() => navigate('PersonDetails', {index})}>
+      <Text style={styles.label}>
+        Name: <Text style={styles.info}>{people.name}</Text>
+      </Text>
+      <Text style={styles.label}>
+        Gender: <Text style={styles.info}>{people.gender}</Text>
+      </Text>
+      <TouchableOpacity onPress={() => goToDetails()}>
         <Text style={styles.btnTxt}>See details</Text>
-      </RectButton>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -60,22 +54,38 @@ const styles = StyleSheet.create({
     paddingVertical: 32,
     borderRadius: 12,
     justifyContent: 'space-between',
-    backgroundColor: 'gray',
+    backgroundColor: colors.darkPurple,
     marginVertical: 12,
     alignSelf: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.29,
+    shadowRadius: 6,
+    elevation: 5,
   },
   starPositioner: {
     position: 'absolute',
     top: 32,
     right: 24,
-    width: 48,
-    height: 48,
-    justifyContent: 'center',
-    alignItems: 'center',
     zIndex: 10,
   },
   btnTxt: {
-    color: 'blue',
+    color: colors.orange,
+    textTransform: 'uppercase',
+    marginTop: 24,
+    fontWeight: 'bold',
+  },
+  label: {
+    color: colors.label,
+    marginRight: 8,
+    marginTop: 8,
+  },
+  info: {
+    color: colors.white,
+    textTransform: 'uppercase',
   },
 });
 
