@@ -1,22 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {useContext, useEffect, useState} from 'react';
-import {Film} from '../providers/peopleContext';
-import {Context as PeopleContext} from '../providers/peopleContext';
+import {useEffect, useState} from 'react';
+import {Film, People} from '../providers/peopleContext';
 import api from '../services/api';
 
-export default (peopleIndex: number) => {
-  const {
-    state: {peoples},
-  } = useContext(PeopleContext);
-
-  const people = peoples[peopleIndex];
-
+export default (person: People) => {
   const [filmsDetails, setFilmsDetails] = useState<Film[]>([]);
   const [loadingFilms, setLoadingFilms] = useState<Boolean>(false);
 
   const fetchFilms = async () => {
-    if (people.films) {
-      const filmsUrls = people.films;
+    if (person.films) {
+      const filmsUrls = person.films;
       const splitedFilmsUrls = filmsUrls.map(
         (filmUrl: string) => filmUrl.split('/api/')[1],
       );
@@ -42,7 +35,9 @@ export default (peopleIndex: number) => {
 
   useEffect(() => {
     fetchFilms();
-  }, [people]);
+  }, [person]);
+
+  const people = person;
 
   return {
     people,

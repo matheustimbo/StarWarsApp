@@ -1,7 +1,7 @@
 import createDataContext from './createDataContext';
 
 export interface PeopleContext {
-  peoples: string[];
+  peoples: People[];
   loadingPeople: Boolean;
 }
 

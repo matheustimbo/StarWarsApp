@@ -1,13 +1,13 @@
 import React from 'react';
 import {View, Text, ActivityIndicator, StyleSheet} from 'react-native';
-import usePeopleDetails from '../../hooks/usePeopleDetails';
 import {RouteProp} from '@react-navigation/native';
 import colors from '../../utils/colors';
 import {People} from '../../providers/peopleContext';
+import usePeopleMovies from '../../hooks/usePeopleMovies';
 
 type RootStackParamList = {
   Home: undefined;
-  PersonDetails: {index: number};
+  PersonDetails: {person: People};
 };
 
 type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'PersonDetails'>;
@@ -17,10 +17,9 @@ type Props = {
 };
 
 const PersonDetails: React.FC<Props> = ({route}) => {
-  const {index} = route.params;
-  console.log('o index', index);
-  const {people, filmsDetails, loadingFilms} = usePeopleDetails(index);
+  const {person} = route.params;
 
+  const {people, filmsDetails, loadingFilms} = usePeopleMovies(person);
 
   return (
     <View style={styles.screen}>

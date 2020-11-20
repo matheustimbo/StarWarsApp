@@ -1,17 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {useContext, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import api from '../services/api';
-import {Context as PeopleContext} from '../providers/peopleContext';
+import {PeopleContext} from '../providers/peopleContext';
 
-export default () => {
+export default ({
+  requestLoad,
+  loadFailure,
+  loadSuccess,
+  state: {peoples, loadingPeople},
+}: {
+  requestLoad: Function;
+  loadFailure: Function;
+  loadSuccess: Function;
+  state: PeopleContext;
+}) => {
   const [nextLink, setNextLink] = useState<string | null>('people');
-
-  const {
-    requestLoad,
-    loadFailure,
-    loadSuccess,
-    state: {peoples, loadingPeople},
-  } = useContext(PeopleContext);
 
   const hasNext: Boolean = nextLink !== null;
 
