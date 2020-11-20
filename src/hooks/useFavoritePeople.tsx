@@ -9,7 +9,6 @@ export default () => {
 
       if (value !== null) {
         const parsedPeople = await JSON.parse(value);
-        console.log('parsedPeople', parsedPeople);
         setBookmarkedPeople([...parsedPeople]);
         // value previously stored
       }
