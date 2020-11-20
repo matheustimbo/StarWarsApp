@@ -26,12 +26,10 @@ export default () => {
         const newPeoplesResponse = await api.get(nextLink);
         const newPeoples = newPeoplesResponse.data;
         if (newPeoples.results?.length > 0) {
-          console.log('results', newPeoples.results);
           setNextLink(newPeoples.next);
           loadSuccess(newPeoples.results);
         }
       } catch (e) {
-        console.log('ERROOOOO', e);
         loadFailure();
       }
     }

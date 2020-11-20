@@ -11,10 +11,20 @@ import usePeople from '../../hooks/usePeople';
 import PeopleItem from './components/PeopleItem';
 import ListLoadingIndicator from './components/ListLoadingIndicator';
 import useFavoritePeople from '../../hooks/useFavoritePeople';
+import {StackNavigationProp} from '@react-navigation/stack';
+import colors from '../../utils/colors';
 
 const {width, height} = Dimensions.get('window');
 
-const Home: React.FC = () => {
+type RootStackParamList = {};
+
+type ProfileScreenNavigationProp = StackNavigationProp<RootStackParamList>;
+
+type Props = {
+  navigation: ProfileScreenNavigationProp;
+};
+
+const Home: React.FC<Props> = ({navigation}) => {
   const {peoples, loadingPeople, fetchPeoples} = usePeople();
 
   const {
@@ -27,12 +37,17 @@ const Home: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.row}>
-        <Switch
-          value={showOnlyBookmarked}
-          onValueChange={() => setShowOnlyBookmarked(!showOnlyBookmarked)}
-        />
-        <Text>Show bookmarked</Text>
+      <View style={styles.fixedHeaderContainer}>
+        <Text style={styles.fixedHeaderTitle}>CHARACTERS</Text>
+        <View style={styles.switchRow}>
+          <Text style={styles.switchLabel}>Show bookmarked</Text>
+          <Switch
+            value={showOnlyBookmarked}
+            onValueChange={() => setShowOnlyBookmarked(!showOnlyBookmarked)}
+            thumbColor={showOnlyBookmarked ? colors.orange : colors.white}
+            trackColor={{true: colors.darkOrange, false: colors.darkPurple}}
+          />
+        </View>
       </View>
 
       <FlatList
@@ -43,10 +58,12 @@ const Home: React.FC = () => {
         }}
         onEndReachedThreshold={0.5}
         keyExtractor={({index}) => index}
-        renderItem={({item, index}) => (
+        renderItem={({item}) => (
           <PeopleItem
             people={item}
-            index={index}
+            goToDetails={() =>
+              navigation.navigate('PersonDetails', {person: item})
+            }
             onPressBookmark={onPressBookmarkPerson}
             isBookmarked={isPersonAlreadyBookmarked}
           />
@@ -63,6 +80,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     height: height - 100,
+    backgroundColor: colors.darkestPurple,
   },
   list: {
     width,
@@ -74,9 +92,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 12,
   },
-  row: {
+  fixedHeaderContainer: {
+    width,
+    height: 56,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    alignItems: 'center',
+  },
+  fixedHeaderTitle: {
+    color: colors.white,
+    fontSize: 20,
+    fontWeight: 'bold',
+    lineHeight: 22,
+  },
+  switchRow: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  switchLabel: {
+    marginRight: 8,
+    fontSize: 14,
+    color: colors.secondaryLabel,
   },
 });
 
